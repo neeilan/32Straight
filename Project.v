@@ -44,13 +44,13 @@ module core(fast_clock, clock, button_1, button_2, button_3, button_4, led_1, le
 	wire button_pressed = ((user_input & 4'b1111) > 0 ? 1 : 0);
 
 	// State logic
-	parameter START 				= 8'b00000000;
+	parameter START 		= 8'b00000000;
 	parameter GENERATE_SEQ 		= 8'b00000001;
-	parameter SHOW_SEQ 			= 8'b00000011;
+	parameter SHOW_SEQ 		= 8'b00000011;
 	parameter AWAIT_INPUT		= 8'b00000010;
 	parameter RECEIVE_INPUT 	= 8'b00000110;
 	parameter CHECK_INPUT		= 8'b00000111;
-	parameter DELAY 				= 8'b00000101;
+	parameter DELAY 		= 8'b00000101;
 	parameter INCREMENT_LEVEL 	= 8'b00000100;
 
 	reg [7:0] current_state 	= START;
@@ -59,9 +59,9 @@ module core(fast_clock, clock, button_1, button_2, button_3, button_4, led_1, le
 	reg [31:0] currentSequence;
 	reg [31:0] userEnteredSequence; 
 
-	initial sequence 						= 32'b11_10_11_01_01_11_10_01_00_01_00_11_01_00_01_11_10;	
-	initial currentSequence 			= 32'b00000000000000000000000000000000;
-	initial userEnteredSequence 		= 32'b00000000000000000000000000000000;
+	initial sequence 		= 32'b11_10_11_01_01_11_10_01_00_01_00_11_01_00_01_11_10;	
+	initial currentSequence 	= 32'b00000000000000000000000000000000;
+	initial userEnteredSequence 	= 32'b00000000000000000000000000000000;
 	
 	// The 2 bit number currently being displayed
 	reg display_msb;
@@ -150,12 +150,13 @@ module core(fast_clock, clock, button_1, button_2, button_3, button_4, led_1, le
 			currentSequence[_display_ct * 2] = sequence[_display_ct * 2];
 			currentSequence[_display_ct* 2 + 1] = sequence[_display_ct* 2 + 1];
 			_display_ct = _display_ct + 1;
-			end
+		end
 	end
 	
 
 	// RECEIVE_INPUT AND INCREMENT LEVEL logic
-	always @(posedge clock)begin
+	always @(posedge clock)
+	begin
 		if (current_state === RECEIVE_INPUT && button_pressed == 1)
 		begin
 			if (user_input == 4'b0001) begin
@@ -180,8 +181,7 @@ module core(fast_clock, clock, button_1, button_2, button_3, button_4, led_1, le
 		if (current_state === INCREMENT_LEVEL || current_state == GENERATE_SEQ) begin
 				numberOfUserInputs = 0;
 				userEnteredSequence = 32'b000000000000000000000000000000000;
-			end
-				
+			end			
 	end
 		
 	
